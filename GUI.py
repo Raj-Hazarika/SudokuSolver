@@ -31,12 +31,28 @@ class Grid:
         self.solved_cubes = [[Cube(self.solved[i][j], i, j, width, height) for j in range(cols)] for i in range(rows)]
 
     def solved_board(self):
+        """
+        This function solves the puzzle.
+        ARGS: None
+        RETURN: None
+        """
         solve(self.solved)
 
     def update_model(self):
+        """
+        Updates the board.
+        ARGS: None
+        RETURN: None
+        """
         self.model = [[self.cubes[i][j].value for j in range(self.cols)] for i in range(self.rows)]
 
     def place(self, val):
+        """
+        This function inserts a number in an empty block.
+        If the number is valid then the block number is changed to that else the block is set back to empty.
+        ARGS: -val > number to be inserted
+        RETURN: True if number is valid and inserted, False otherwise
+        """
         row, col = self.selected
         if self.cubes[row][col].value == 0:
             self.cubes[row][col].set(val)
@@ -51,10 +67,21 @@ class Grid:
                 return False
 
     def sketch(self, val):
+        """
+        This function marks the given number in a block without entering it.
+        The number is just added as a side-note and not checked whether it is valid or not.
+        ARGS: -val > number to be inserted
+        RETURN: None
+        """
         row, col = self.selected
         self.cubes[row][col].set_temp(val)
 
     def draw(self, win):
+        """
+        This function draws the sudoku board and the each block.
+        ARGS: -win > pygame windows
+        RETURN: None
+        """
         # Draw Grid Lines
         gap = self.width / 9
         for i in range(self.rows + 1):
@@ -71,6 +98,12 @@ class Grid:
                 self.cubes[i][j].draw(win)
 
     def view_solved(self, win):
+        """
+        If the space key is pressed then the solved board is displayed.
+        This function is similar to draw() function but displays the solved board instead of the puzzle.
+        ARGS: -win > pygame windows
+        RETURN: None
+        """
         gap = self.width / 9
         for i in range(self.rows + 1):
             if i % 3 == 0 and i != 0:
@@ -89,6 +122,11 @@ class Grid:
                     self.solved_cubes[i][j].draw_final(win, (0, 0, 0))
 
     def select(self, row, col):
+        """
+        Selects the blocks that has been pressed.
+        ARGS: -row > row number of the block; -col > column number of the block
+        RETURN: None
+        """
         # Reset all other
         for i in range(self.rows):
             for j in range(self.cols):
@@ -98,14 +136,20 @@ class Grid:
         self.selected = (row, col)
 
     def clear(self):
+        """
+        Clears the block.
+        ARGS: None
+        RETURN: None
+        """
         row, col = self.selected
         if self.cubes[row][col].value == 0:
             self.cubes[row][col].set_temp(0)
 
     def click(self, pos):
         """
-        :param: pos
-        :return: (row, col)
+        Recognises a click on an empty block.
+        ARGS: -pos > pygame mouse position tuple as x and y direction
+        RETURN: Row number and column number if clicked on a valid block, None otherwise
         """
         if pos[0] < self.width and pos[1] < self.height:
             gap = self.width / 9
@@ -116,6 +160,11 @@ class Grid:
             return None
 
     def is_finished(self):
+        """
+        Checks if the game is finished or not.
+        ARGS: None
+        RETURN: True if game compeleted, False otherwise
+        """
         for i in range(self.rows):
             for j in range(self.cols):
                 if self.cubes[i][j].value == 0:
@@ -137,6 +186,11 @@ class Cube:
         self.selected = False
 
     def draw(self, win):
+        """
+        Prints the numbers of the unsolved sudoku puzzle.
+        ARGS: -win > pygame window
+        RETURN: None
+        """
         fnt = pygame.font.SysFont('dejavuserif', 40)
 
         gap = self.width / 9
@@ -154,6 +208,11 @@ class Cube:
             pygame.draw.rect(win, (255, 0, 0), (x, y, gap, gap), 3)
 
     def draw_final(self, win, color):
+        """
+        Draws the inserted value on the board.
+        ARGS: -win > pygame window; -color > color of the font
+        RETURN: None
+        """
         fnt = pygame.font.SysFont('dejavuserif', 40)
 
         gap = self.width / 9
@@ -164,9 +223,19 @@ class Cube:
         win.blit(text, (x + (gap / 2 - text.get_width() / 2), y + (gap / 2 - text.get_height() / 2)))
 
     def set(self, val):
+        """
+        A setter function to assign a number to a block.
+        ARGS: -val > number to be assigned
+        RETURN: None
+        """
         self.value = val
 
     def set_temp(self, val):
+        """
+        A setter function to assign the rough/side-note number to a block.
+        ARGS: -val > number to be assigned
+        RETURN: None
+        """
         self.temp = val
 
 
@@ -190,6 +259,11 @@ def redraw_window(win, board, clock, incorrect, dims, show, pos=None):
 
 
 def format_time(secs):
+    """
+    Responsible for the timer in the game. Converting minutes and hours.
+    ARGS: -secs > number of seconds passed since the game started
+    RETURN: -mat > a string formating seconds, minutes and hours
+    """
     sec = secs % 60
     minute = secs // 60
     hour = minute // 60
