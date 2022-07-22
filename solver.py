@@ -1,24 +1,18 @@
-board = [
-    [7, 8, 0, 4, 0, 0, 1, 2, 0],
-    [6, 0, 0, 0, 7, 5, 0, 0, 9],
-    [0, 0, 0, 6, 0, 1, 0, 7, 8],
-    [0, 0, 7, 0, 4, 0, 2, 6, 0],
-    [0, 0, 1, 0, 5, 0, 9, 3, 0],
-    [9, 0, 4, 0, 6, 0, 0, 0, 5],
-    [0, 7, 0, 3, 0, 0, 0, 1, 2],
-    [1, 2, 0, 0, 0, 7, 4, 0, 0],
-    [0, 4, 9, 2, 0, 6, 0, 0, 7]
-]
-
-
 def solve(bo):
-    find = find_empty(bo)
+    """
+    This function is responsible to solve a given block in the grid.
+    This is done by entering all the numbers from 1 to 9 and finding a valid entry.
+    If the entry is illegal then the block is made empty and the previous block value is changed and so on.
+    ARGS: -bo > block object
+    RETURN: True if solved, False otherwise
+    """
+    find = find_empty(bo)  # Calling the find_empty() function to check wheher the given block is empty or not.
     if not find:
-        return True
+        return True  # exiting the function if the block is not empty.
     else:
-        row, col = find
+        row, col = find  # if block is empty then assigning its row and column to identify its location.
 
-    for i in range(1, 10):
+    for i in range(1, 10):  # checks for every number from 1 to 9 for a valid entry
         if valid(bo, i, (row, col)):
             bo[row][col] = i
 
@@ -31,6 +25,12 @@ def solve(bo):
 
 
 def valid(bo, num, pos):
+    """
+    This function is resonsible to check whether a number is valid or not. 
+    This is done by checking along the row, along the column and in 3x3 grids.
+    ARGS: -bo > block object; -num > number to be inserted; -pos > row and column index of the block
+    RETURN: True if the number is valid, False otherwise
+    """
     # check row
     for i in range(len(bo[0])):
         if bo[pos[0]][i] == num and pos[1] != i:
@@ -53,6 +53,11 @@ def valid(bo, num, pos):
 
 
 def print_board(bo):
+    """
+    This function is responsible for printing the board.
+    ARGS: -bo > block object
+    RETURN: None
+    """
     for i in range(len(bo)):
         if i % 3 == 0 and i != 0:
             print("_ _ _ _ _ _ _ _ _ _ _ ")
@@ -64,6 +69,12 @@ def print_board(bo):
 
 
 def find_empty(bo):
+    """
+    This function checks whether the given block is empty or not. 
+    If the given block is empty then it returns the location of the block.
+    ARGS: -bo > block object
+    RETURN: row and column index if block is empty, None otherwise
+    """
     for i in range(len(bo)):
         for j in range(len(bo[0])):
             if bo[i][j] == 0:
